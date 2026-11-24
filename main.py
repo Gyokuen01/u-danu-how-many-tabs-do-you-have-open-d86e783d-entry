@@ -7,16 +7,25 @@ still believable, with ties broken by shorter text and earlier receipt.
 
 We answer with 487: high enough to raise an eyebrow, low enough that
 anyone who hoards tabs will nod along instead of calling it fake.
+
+The answer itself lives in answer.py, so the number can be tuned
+without touching the writer logic.
 """
 
 import os
 
-ANSWER = "487"
-OUTPUT_PATH = "/output/entry.txt"
+from answer import ANSWER, OUTPUT_PATH
+
+
+def validate(answer: str) -> None:
+    """Check the answer obeys the spec: 1-5 digits, nothing else."""
+    if not answer.isdigit() or not 1 <= len(answer) <= 5:
+        raise ValueError("answer must be 1-5 digits: %r" % (answer,))
 
 
 def main() -> None:
     """Write the tab count to the entry file."""
+    validate(ANSWER)
     os.makedirs(os.path.dirname(OUTPUT_PATH), exist_ok=True)
     with open(OUTPUT_PATH, "w", encoding="utf-8") as handle:
         handle.write(ANSWER)
